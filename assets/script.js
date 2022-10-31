@@ -11,18 +11,47 @@
 // THEN the text for that event is saved in local storage
 // WHEN I refresh the page
 // THEN the saved events persist -->
-var workHours = [9, 17];
-var workLength = workHours[1]-workHours[0];
+var workHours = [9, 17]; // input on 24 clock
+var workLength = workHours[1] - workHours[0];
 var schedule = [];
-for (i = 0; i <= workLength; i++) {
-    schedule[i] = {
-        "timeSlot":  moment().hour(i+workHours[0]).format('hA'),
-        "apptDesc": "",
-    }
-}
-console.log(schedule);
+
+
 var currentDay = $('#currentDay');
 currentDay.text(moment().format('MMMM Do'));
+var scheduleContainer = $('.container');
+
+
+function getSchedule() {
+    var storedSchedule = JSON.parse(localStorage.getItem("schedule"));
+    if (storedSchedule === null) {
+        for (i = 0; i <= workLength; i++) {
+            schedule[i] = {
+                "timeSlot": moment().hour(i + workHours[0]).format('hA'),
+                "apptDesc": "",
+            }
+        };
+    } else {
+        schedule = storedSchedule;
+    }
+}
+
+
+getSchedule();
+for (i = 0; i < schedule.length; i++) {
+    var apptRow = $('<div>')
+    .addClass('row time-block')
+    .attr({ 
+        id: 'row-' + (i + workHours[0]) 
+    });
+    var apptTime = $('<div>')
+    .addClass('hour col-1 justify-center')
+    .text(schedule[i].timeSlot);
+    $(scheduleContainer).append(apptRow);
+    $(apptRow).append(apptTime);
+    console.log('test');
+}
+
+
 
 // obj schedule timeSlot, description
 // if null build, otherwise parse
