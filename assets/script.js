@@ -28,6 +28,7 @@ function getSchedule() {
             schedule[i] = {
                 "timeSlot": moment().hour(i + workHours[0]).format('hA'),
                 "apptDesc": "",
+                "state": "",
             }
         };
     } else {
@@ -43,11 +44,34 @@ for (i = 0; i < schedule.length; i++) {
     .attr({ 
         id: 'row-' + (i + workHours[0]) 
     });
+
     var apptTime = $('<div>')
     .addClass('hour col-1 justify-center')
     .text(schedule[i].timeSlot);
+
+    var apptSubject = $('<div>')
+    .addClass('col-10');
+
+    var apptInput = $('<p>')
+    .addClass('description')
+    .text(' ');
+
+    var apptSave = $('<button>')
+    .addClass('col-1 saveBtn')
+    .attr({
+        id: 'save-button-' + (i + 9),
+        type: 'button',
+    });
+
+    var saveIcon = $('<i>')
+    .addClass('fas fa-save');
+
     $(scheduleContainer).append(apptRow);
     $(apptRow).append(apptTime);
+    $(apptRow).append(apptSubject);
+    $(apptSubject).append(apptInput);
+    $(apptRow).append(apptSave);
+    $(apptSave).append(saveIcon);
     console.log('test');
 }
 
