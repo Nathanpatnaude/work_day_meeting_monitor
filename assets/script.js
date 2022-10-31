@@ -11,7 +11,16 @@
 // THEN the text for that event is saved in local storage
 // WHEN I refresh the page
 // THEN the saved events persist -->
-
+var workHours = [9, 17];
+var workLength = workHours[1]-workHours[0];
+var schedule = [];
+for (i = 0; i <= workLength; i++) {
+    schedule[i] = {
+        "timeSlot":  moment().hour(i+workHours[0]).format('hA'),
+        "apptDesc": "",
+    }
+}
+console.log(schedule);
 var currentDay = $('#currentDay');
 currentDay.text(moment().format('MMMM Do'));
 
@@ -24,4 +33,4 @@ currentDay.text(moment().format('MMMM Do'));
 
 //save button click // save, purge & rebuild
 
-//start timer()
+
