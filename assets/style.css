@@ -8,7 +8,7 @@ textarea {
   background: transparent;
   border: none;
   resize: none;
-  color: #b93d3d;
+  color: #000000;
   border-left: 1px solid black;
   padding: 10px;
   height: 100%;
@@ -26,7 +26,9 @@ textarea {
 
 .description {
   white-space: pre-wrap;
+  text-align: start;
   height: 100%;
+  padding: 10px;
 }
 
 .time-block {

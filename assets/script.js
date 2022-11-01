@@ -69,7 +69,7 @@ for (i = 0; i < schedule.length; i++) {
 
     var apptInput = $('<p>')
     .addClass('description col-12')
-    .text(' ');
+    .text('dv ');
 
     var apptSave = $('<button>')
     .addClass('col-1 saveBtn')
@@ -91,13 +91,20 @@ for (i = 0; i < schedule.length; i++) {
 }
 
 $('.col-10').on( 'click', 'p', function() {
-    var text = $(this).val().trim();
+    var text = $(this).text().trim();
     var input = $('<textarea>').val(text);
 
     $(this).replaceWith(input);
     input.trigger('focus');
 
 });
+
+$('.col-10').on('blur', 'textarea', function() {
+    var ext = $(this).val().trim();
+    var userinput = $('<p>').addClass('description col-12').text(ext);
+    $(this).replaceWith(userinput);
+});
+
 
 
 
