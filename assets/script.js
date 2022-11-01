@@ -49,6 +49,14 @@ function setState (hour) {
     console.log(schedule[hour].state)
 }
 
+function saveSchedule(hour, appt) {
+    for (i = 0; i < schedule.length; i++) {
+        if (schedule[i].timeSlot === hour) {
+            schedule[i].apptDesc = appt;
+        }
+        localStorage.setItem("storedSchedule", JSON.stringify(schedule));
+    }
+}
 
 getSchedule();
 for (i = 0; i < schedule.length; i++) {
@@ -76,6 +84,14 @@ for (i = 0; i < schedule.length; i++) {
     .attr({
         id: 'save-button-' + (i + workHours[0]),
         type: 'button',
+    })
+    .on('click', function () {
+// need constant !=i, in h4, need to get first sibling text
+var hour = 0;
+console.log($(this).siblings().first().text());
+// need text on row from apptInput, need last sibling's child
+var appt = 0;
+// pass to saveSchedule(hour, appt);
     });
 
     var saveIcon = $('<i>')
@@ -89,6 +105,8 @@ for (i = 0; i < schedule.length; i++) {
     $(apptSave).append(saveIcon);
     console.log('test');
 }
+
+
 
 $('.col-10').on( 'click', 'p', function() {
     var text = $(this).text().trim();
