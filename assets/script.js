@@ -1,4 +1,4 @@
- // #H input on 24 clock; workHours= [first appointment, last appointment]
+// #H input on 24 clock; workHours= [first appointment, last appointment]
 var workHours = [9, 17];
 
 var workLength = workHours[1] - workHours[0];
@@ -9,6 +9,7 @@ var currentHour = moment().format('H');
 currentDay.text(moment().format('MMMM Do'));
 var scheduleContainer = $('.container');
 
+//finds or builds [{}, {}]
 function getSchedule() {
     var storedSchedule = JSON.parse(localStorage.getItem("storedSchedule"));
     if (storedSchedule === null) {
@@ -24,9 +25,9 @@ function getSchedule() {
     }
 }
 
+//updates current hour position in schedule
 function setState(hour) {
     var qHour = hour + workHours[0];
-    console.log(qHour);
     if (qHour < currentHour) {
         schedule[hour].state = 'past';
     } else if (qHour === currentHour) {
@@ -34,25 +35,22 @@ function setState(hour) {
     } else {
         schedule[hour].state = 'future';
     }
-    console.log(schedule[hour].state)
 }
 
+// saves current row text in schedule[row].apptDesc
+// then saves schedule[] in localstorage 
 function saveSchedule(hour, appt) {
-    console.log(hour);
     for (i = 0; i < schedule.length; i++) {
-        console.log(schedule[i].timeSlot);
-
-        
-
         if (schedule[i].timeSlot === hour) {
             schedule[i].apptDesc = appt;
-            console.log(schedule[i].apptDesc);
         };
     }
     localStorage.setItem("storedSchedule", JSON.stringify(schedule));
 }
 
+//forces a schedule[] structure
 getSchedule();
+//builds schedule[] interface based on workHours[1,2]
 for (i = 0; i < schedule.length; i++) {
     var apptRow = $('<div>')
         .addClass('row time-block')
@@ -80,9 +78,7 @@ for (i = 0; i < schedule.length; i++) {
             type: 'button',
         })
         .on('click', function () {
-            // need constant !=i, in h4, need to get first sibling text
             var hour = $(this).siblings().first().text();
-            // need text on row from apptInput, need last sibling's child text
             var appt = $(this).siblings().last().children().text();
             saveSchedule(hour, appt);
         });
@@ -96,11 +92,10 @@ for (i = 0; i < schedule.length; i++) {
     $(apptSubject).append(apptInput);
     $(apptRow).append(apptSave);
     $(apptSave).append(saveIcon);
-    console.log('test');
 }
 
 
-
+// creates textarea within clicked descrition area
 $('.col-10').on('click', 'p', function () {
     var text = $(this).text().trim();
     var input = $('<textarea>').val(text);
@@ -110,6 +105,7 @@ $('.col-10').on('click', 'p', function () {
 
 });
 
+//deselecting removes textarea, moves text to previous <p> format
 $('.col-10').on('blur', 'textarea', function () {
     var ext = $(this).val().trim();
     var userinput = $('<p>').addClass('description col-12').text(ext);
