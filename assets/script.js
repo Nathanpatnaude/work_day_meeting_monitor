@@ -17,9 +17,9 @@ var schedule = [];
 
 
 var currentDay = $('#currentDay');
+var currentHour = moment().format('H');
 currentDay.text(moment().format('MMMM Do'));
 var scheduleContainer = $('.container');
-
 
 function getSchedule() {
     var storedSchedule = JSON.parse(localStorage.getItem("schedule"));
@@ -36,6 +36,19 @@ function getSchedule() {
     }
 }
 
+function setState (hour) {
+    var qHour = hour +workHours[0];
+    console.log(qHour);
+    if (qHour < currentHour) {
+        schedule[hour].state = 'past';
+    } else if (qHour === currentHour) {
+        schedule[hour].state = 'present';
+    } else {
+        schedule[hour].state = 'future';
+    }
+    console.log(schedule[hour].state)
+}
+
 
 getSchedule();
 for (i = 0; i < schedule.length; i++) {
@@ -49,8 +62,10 @@ for (i = 0; i < schedule.length; i++) {
     .addClass('hour col-1 justify-center')
     .text(schedule[i].timeSlot);
 
+    setState(i);
+
     var apptSubject = $('<div>')
-    .addClass('col-10');
+    .addClass('col-10 ' + schedule[i].state);
 
     var apptInput = $('<p>')
     .addClass('description')
@@ -59,12 +74,12 @@ for (i = 0; i < schedule.length; i++) {
     var apptSave = $('<button>')
     .addClass('col-1 saveBtn')
     .attr({
-        id: 'save-button-' + (i + 9),
+        id: 'save-button-' + (i + workHours[0]),
         type: 'button',
     });
 
     var saveIcon = $('<i>')
-    .addClass('fas fa-save');
+    .addClass('fas fa-save fa-2x');
 
     $(scheduleContainer).append(apptRow);
     $(apptRow).append(apptTime);
@@ -79,8 +94,8 @@ for (i = 0; i < schedule.length; i++) {
 
 // obj schedule timeSlot, description
 // if null build, otherwise parse
-
 //buildSchedul()
+
 //isCurrent()
 //isPast()
 
