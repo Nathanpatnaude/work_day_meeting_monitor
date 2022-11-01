@@ -1,20 +1,8 @@
-// <!-- GIVEN I am using a daily planner to create a schedule
-// WHEN I open the planner
-// THEN the current day is displayed at the top of the calendar
-// WHEN I scroll down
-// THEN I am presented with time blocks for standard business hours
-// WHEN I view the time blocks for that day
-// THEN each time block is color-coded to indicate whether it is in the past, present, or future
-// WHEN I click into a time block
-// THEN I can enter an event
-// WHEN I click the save button for that time block
-// THEN the text for that event is saved in local storage
-// WHEN I refresh the page
-// THEN the saved events persist -->
-var workHours = [9, 17]; // input on 24 clock [start time, end time]
+ // #H input on 24 clock; workHours= [first appointment, last appointment]
+var workHours = [9, 17];
+
 var workLength = workHours[1] - workHours[0];
 var schedule = [];
-
 
 var currentDay = $('#currentDay');
 var currentHour = moment().format('H');
@@ -22,7 +10,7 @@ currentDay.text(moment().format('MMMM Do'));
 var scheduleContainer = $('.container');
 
 function getSchedule() {
-    var storedSchedule = JSON.parse(localStorage.getItem("schedule"));
+    var storedSchedule = JSON.parse(localStorage.getItem("storedSchedule"));
     if (storedSchedule === null) {
         for (i = 0; i <= workLength; i++) {
             schedule[i] = {
@@ -36,8 +24,8 @@ function getSchedule() {
     }
 }
 
-function setState (hour) {
-    var qHour = hour +workHours[0];
+function setState(hour) {
+    var qHour = hour + workHours[0];
     console.log(qHour);
     if (qHour < currentHour) {
         schedule[hour].state = 'past';
@@ -50,52 +38,57 @@ function setState (hour) {
 }
 
 function saveSchedule(hour, appt) {
+    console.log(hour);
     for (i = 0; i < schedule.length; i++) {
+        console.log(schedule[i].timeSlot);
+
+        
+
         if (schedule[i].timeSlot === hour) {
             schedule[i].apptDesc = appt;
-        }
-        localStorage.setItem("storedSchedule", JSON.stringify(schedule));
+            console.log(schedule[i].apptDesc);
+        };
     }
+    localStorage.setItem("storedSchedule", JSON.stringify(schedule));
 }
 
 getSchedule();
 for (i = 0; i < schedule.length; i++) {
     var apptRow = $('<div>')
-    .addClass('row time-block')
-    .attr({ 
-        id: 'row-' + (i + workHours[0]) 
-    });
+        .addClass('row time-block')
+        .attr({
+            id: 'row-' + (i + workHours[0])
+        });
 
     var apptTime = $('<div>')
-    .addClass('hour col-1 justify-center')
-    .text(schedule[i].timeSlot);
+        .addClass('hour col-1 justify-center')
+        .text(schedule[i].timeSlot);
 
     setState(i);
 
     var apptSubject = $('<div>')
-    .addClass('p-0 col-10 ' + schedule[i].state);
+        .addClass('p-0 col-10 ' + schedule[i].state);
 
     var apptInput = $('<p>')
-    .addClass('description col-12')
-    .text('dv ');
+        .addClass('description col-12')
+        .text(schedule[i].apptDesc);
 
     var apptSave = $('<button>')
-    .addClass('col-1 saveBtn')
-    .attr({
-        id: 'save-button-' + (i + workHours[0]),
-        type: 'button',
-    })
-    .on('click', function () {
-// need constant !=i, in h4, need to get first sibling text
-var hour = 0;
-console.log($(this).siblings().first().text());
-// need text on row from apptInput, need last sibling's child
-var appt = 0;
-// pass to saveSchedule(hour, appt);
-    });
+        .addClass('col-1 saveBtn')
+        .attr({
+            id: 'save-button-' + (i + workHours[0]),
+            type: 'button',
+        })
+        .on('click', function () {
+            // need constant !=i, in h4, need to get first sibling text
+            var hour = $(this).siblings().first().text();
+            // need text on row from apptInput, need last sibling's child text
+            var appt = $(this).siblings().last().children().text();
+            saveSchedule(hour, appt);
+        });
 
     var saveIcon = $('<i>')
-    .addClass('fas fa-save fa-2x');
+        .addClass('fas fa-save fa-2x');
 
     $(scheduleContainer).append(apptRow);
     $(apptRow).append(apptTime);
@@ -108,7 +101,7 @@ var appt = 0;
 
 
 
-$('.col-10').on( 'click', 'p', function() {
+$('.col-10').on('click', 'p', function () {
     var text = $(this).text().trim();
     var input = $('<textarea>').val(text);
 
@@ -117,23 +110,8 @@ $('.col-10').on( 'click', 'p', function() {
 
 });
 
-$('.col-10').on('blur', 'textarea', function() {
+$('.col-10').on('blur', 'textarea', function () {
     var ext = $(this).val().trim();
     var userinput = $('<p>').addClass('description col-12').text(ext);
     $(this).replaceWith(userinput);
 });
-
-
-
-
-
-// obj schedule timeSlot, description
-// if null build, otherwise parse
-//buildSchedul()
-
-//isCurrent()
-//isPast()
-
-//save button click // save, purge & rebuild
-
-
