@@ -11,7 +11,7 @@
 // THEN the text for that event is saved in local storage
 // WHEN I refresh the page
 // THEN the saved events persist -->
-var workHours = [9, 17]; // input on 24 clock
+var workHours = [9, 17]; // input on 24 clock [start time, end time]
 var workLength = workHours[1] - workHours[0];
 var schedule = [];
 
@@ -65,10 +65,10 @@ for (i = 0; i < schedule.length; i++) {
     setState(i);
 
     var apptSubject = $('<div>')
-    .addClass('col-10 ' + schedule[i].state);
+    .addClass('p-0 col-10 ' + schedule[i].state);
 
     var apptInput = $('<p>')
-    .addClass('description')
+    .addClass('description col-12')
     .text(' ');
 
     var apptSave = $('<button>')
@@ -89,6 +89,16 @@ for (i = 0; i < schedule.length; i++) {
     $(apptSave).append(saveIcon);
     console.log('test');
 }
+
+$('.col-10').on( 'click', 'p', function() {
+    var text = $(this).val().trim();
+    var input = $('<textarea>').val(text);
+
+    $(this).replaceWith(input);
+    input.trigger('focus');
+
+});
+
 
 
 
