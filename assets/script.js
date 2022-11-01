@@ -53,13 +53,10 @@ getSchedule();
 //builds schedule[] interface based on workHours[1,2]
 for (i = 0; i < schedule.length; i++) {
     var apptRow = $('<div>')
-        .addClass('row time-block')
-        .attr({
-            id: 'row-' + (i + workHours[0])
-        });
+        .addClass('row time-block');
 
     var apptTime = $('<div>')
-        .addClass('hour col-1 justify-center')
+        .addClass('hour col-1 justify-left')
         .text(schedule[i].timeSlot);
 
     setState(i);
@@ -74,7 +71,6 @@ for (i = 0; i < schedule.length; i++) {
     var apptSave = $('<button>')
         .addClass('col-1 saveBtn')
         .attr({
-            id: 'save-button-' + (i + workHours[0]),
             type: 'button',
         })
         .on('click', function () {
